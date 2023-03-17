@@ -1,5 +1,6 @@
 import random
 
+# starter variables
 people = 100
 bushels = 2800  # grain in storage
 acres = 1000

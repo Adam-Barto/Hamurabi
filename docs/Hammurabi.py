@@ -69,6 +69,7 @@ def printSummary() :
 def finalSummary() :
     """Print final summary of game he usual evaluation is based on how many people starved,
     and how many acres per person you end up with for example"""
+    pass
 
 
 

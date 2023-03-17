@@ -1,5 +1,9 @@
 import random
 
+people = 100
+bushels = 2800  # grain in storage
+acres = 1000
+land_val = 19  # bushels/acre
 
 
 class Hamurabi(object):
@@ -16,7 +20,7 @@ def askHowManyAcresToSell(acres_owned) :
     """Ask player how many acres to sell and return that number"""
     pass
 
-def askHowMuchGrainToFeedThePeople() :
+def askHowMuchGrainToFeedThePeople(bushels) :
     """Ask player how much grain to feed people and return that number"""
     pass
 

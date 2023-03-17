@@ -5,6 +5,7 @@ people = 100
 bushels = 2800  # grain in storage
 acres = 1000
 land_val = 19  # bushels/acre
+year = 10  # rounds
 
 
 class Hamurabi(object):

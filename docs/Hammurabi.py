@@ -15,7 +15,7 @@ class Hamurabi(object):
     ## lots more functions here...
 
 
-def player_input(text='') -> str:
+def player_input(text='Placeholder') -> str:
     """
     Takes a string from the code to decide what to display, then returns input.
     No test: due to the simplicity of the code.

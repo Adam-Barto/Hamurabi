@@ -50,7 +50,10 @@ class Hamurabi(object):
             print(f'OH GREAT HAMMURABI, IT IS YEAR {game_dict.get(Stats.YEAR)} OF YOUR GLORIOUS RULE!\n'
                   f'WHAT IS IT THAT YOU WISH TO DO?')
             status_print('CURRENTLY:')
-            print_summary()
+
+            if can_purchase(*askHowMuchGrainToFeedThePeople()):
+
+                print('you can do it')
 
             last_round_update()
             game_dict[Stats.YEAR] = game_dict[Stats.YEAR] + 1
@@ -58,8 +61,8 @@ class Hamurabi(object):
     ## lots more functions here...
 
 
-def update_value(stat: Stats, value: int):
-    game_dict[stat] = value
+def purchase(stat: Stats, value: int):
+    game_dict[stat] = game_dict[stat] - value
 
 
 # Updates Last Round Dictionary
@@ -68,8 +71,10 @@ def last_round_update():
         last_round_dict[i] = game_dict.get(i)
 
 
-def can_purchase(amount_buying, has_amount):
+def can_purchase(amount_buying, stats: Stats):
+    has_amount = game_dict[stats]
     if amount_buying <= has_amount:
+        purchase(stats, amount_buying)
         return True
     else:
         return False
@@ -127,7 +132,8 @@ def player_input(text='Placeholder') -> str:
 def askHowManyAcresToBuy():
     """Ask player how many acres to buy and return that number"""
     print('HOW MANY ACRES WOULD YOU LIKE TO BUY?')
-    return player_input(f'EACH ACRE COSTS {game_dict.get(Stats.LAND_VAL)} BUSHELS')
+    print(f'EACH ACRE COSTS {game_dict.get(Stats.LAND_VAL)} BUSHELS')
+    return player_input('HOW MANY ACRES WOULD YOU LIKE TO BUY?')
 
 
 def askHowManyAcresToSell(acres_owned):
@@ -135,9 +141,9 @@ def askHowManyAcresToSell(acres_owned):
     pass
 
 
-def askHowMuchGrainToFeedThePeople(bushels):
-    """Ask player how much grain to feed people and return that number"""
-    return player_input('HOW MUCH WOULD YOU LIKE TO FEED YOUR PEOPLE?')
+def askHowMuchGrainToFeedThePeople():
+    """Ask player how much grain to feed people and return that number, and what Value to Modify"""
+    return int(player_input('HOW MUCH WOULD YOU LIKE TO FEED YOUR PEOPLE?')), Stats.BUSHELS
 
 
 def askHowManyAcresToPlant(acresOwned, population, bushels):

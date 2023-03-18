@@ -59,9 +59,8 @@ class Hamurabi(object):
                 print(f'YOU HAVE FED YOUR PEOPLE {curr_round_action_dict.get(Stats.FEED)} BUSHEL(S) EACH')
 
             # The above should be moved to a Method Later
-            hungry_deaths = starvationDeaths(game_dict[Stats.PEOPLE], curr_round_action_dict[Stats.FEED])
-            game_dict[Stats.PEOPLE] = game_dict[Stats.PEOPLE] - hungry_deaths
-            print(f'{hungry_deaths} People Died Due to Starvation')
+            print_summary()
+
 
 
             last_round_update()
@@ -228,11 +227,9 @@ def newCostOfLand():
 
 
 def print_summary():
-    """
-    This will be used to display the difference between values
-    :return:
-    """
-    pass
+    hungry_deaths = starvationDeaths(game_dict[Stats.PEOPLE], curr_round_action_dict[Stats.FEED])
+    game_dict[Stats.PEOPLE] = game_dict[Stats.PEOPLE] - hungry_deaths
+    print(f'{hungry_deaths} People Died Due to Starvation')
 
 
 def finalSummary():

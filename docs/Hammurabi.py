@@ -217,8 +217,8 @@ def plagueDeaths(population):
     if random.random() < 0.15:
         plaguePop = ceil(population * 0.5)
         return population - plaguePop
-
-
+    else:
+        return 0
 
 def starvationDeaths(population, bushelsFedToPeople):
     """Each subject needs 20 bushels to survive, more makes them happy but not necessary

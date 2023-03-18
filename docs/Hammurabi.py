@@ -1,6 +1,8 @@
 import random
 from enum import Enum
 
+line_break = '-' * 10
+
 
 # starter variables
 class Stats(Enum):
@@ -9,14 +11,23 @@ class Stats(Enum):
     BUSHELS = 2
     ACRES = 3
     LAND_VAL = 4
+    END = 5
 
 
 game_dict = {
-    Stats.YEAR: 10, # Rounds
+    Stats.YEAR: 1,  # Current Round
+    Stats.END: 10,
     Stats.PEOPLE: 100,
     Stats.BUSHELS: 2800,  # grain in storage
     Stats.ACRES: 1000,
     Stats.LAND_VAL: 19  # bushels/acre
+}
+
+last_round_dict = {
+    Stats.PEOPLE: 0,
+    Stats.BUSHELS: 0,  # grain in storage
+    Stats.ACRES: 0,
+    Stats.LAND_VAL: 0  # bushels/acre
 }
 
 
@@ -31,8 +42,50 @@ class Hamurabi(object):
     def play_game(self):
         print
         "Let's play!"
-        start_game()
+        print(line_break * 2)
+        print('OH GREAT HAMMURABI, YOU HAVE ASCENDED TO THE THRONE!')
+        last_round_update()
+
+        while (game_dict.get(Stats.YEAR) <= game_dict.get(Stats.END)):
+            print(f'OH GREAT HAMMURABI, IT IS YEAR {game_dict.get(Stats.YEAR)} OF YOUR GLORIOUS RULE!\n'
+                  f'WHAT IS IT THAT YOU WISH TO DO?')
+            status_print('CURRENTLY:')
+            print_summary()
+
+            last_round_update()
+            game_dict[Stats.YEAR] = game_dict[Stats.YEAR] + 1
+
     ## lots more functions here...
+
+
+def update_value(stat: Stats, value: int):
+    game_dict[stat] = value
+
+
+# Updates Last Round Dictionary
+def last_round_update():
+    for i in last_round_dict:
+        last_round_dict[i] = game_dict.get(i)
+
+
+def can_purchase(amount_buying, has_amount):
+    if amount_buying <= has_amount:
+        return True
+    else:
+        return False
+
+
+# Have you done a good job between rounds?
+def is_good_diff_between_rounds(value):
+    if last_round_dict.get(value) is None:
+        print(f'{value} is Not a Valid Key of last_round_dict!')
+        return 'Break My Code so I can Fix it'
+    if game_dict.get(value) < last_round_dict.get(value):
+        return False
+    elif game_dict.get(value) > last_round_dict.get(value):
+        return True
+    else:
+        return None
 
 
 def show_value(value: int, value_name: str) -> None:
@@ -45,36 +98,36 @@ def show_value(value: int, value_name: str) -> None:
     print(f'YOU HAVE {value} {value_name}')
 
 
-def status_print(text: str):
+def status_print(text: str) -> None:
     """
     Prints out the Status
     :param: text This will be printed out.
     :return:
     """
     print(text)
+    print(line_break)
     show_value(game_dict.get(Stats.PEOPLE), 'PEOPLE')
     show_value(game_dict.get(Stats.BUSHELS), 'BUSHELS')
     show_value(game_dict.get(Stats.ACRES), 'ACRES')
 
 
-def start_game():
-    print('OH GREAT HAMMURABI, YOU HAVE ASCENDED TO THE THRONE')
-    status_print('HERE IS THE STATE OF YOUR MIGHTY KINGDOM:')
+def menu_display():
+    player_input('HOW MUCH WOULD YOU LIKE TO FEED YOUR PEOPLE?')
 
 
 def player_input(text='Placeholder') -> str:
     """
     Takes a string from the code to decide what to display, then returns input.
-    No test: due to the simplicity of the code.
     :param text: The string in question.
     :return: returns a string, so be sure to convert it for the variables
     """
     return input(text + ' ')
 
 
-def askHowManyAcresToBuy(price, bushels):
+def askHowManyAcresToBuy():
     """Ask player how many acres to buy and return that number"""
-    pass
+    print('HOW MANY ACRES WOULD YOU LIKE TO BUY?')
+    return player_input(f'EACH ACRE COSTS {game_dict.get(Stats.LAND_VAL)} BUSHELS')
 
 
 def askHowManyAcresToSell(acres_owned):
@@ -84,7 +137,7 @@ def askHowManyAcresToSell(acres_owned):
 
 def askHowMuchGrainToFeedThePeople(bushels):
     """Ask player how much grain to feed people and return that number"""
-    pass
+    return player_input('HOW MUCH WOULD YOU LIKE TO FEED YOUR PEOPLE?')
 
 
 def askHowManyAcresToPlant(acresOwned, population, bushels):
@@ -131,8 +184,11 @@ def newCostOfLand():
     pass
 
 
-def printSummary():
-    """Print summary of the year"""
+def print_summary():
+    """
+    This will be used to display the difference between values
+    :return:
+    """
     pass
 
 

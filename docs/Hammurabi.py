@@ -15,7 +15,8 @@ class Stats(Enum):
     LAND_VAL = 5
     END = 6
     LABOUR = 7
-    FEED = 8  # Empty
+    FEED = 8
+    PLANTED = 9
 
 
 game_dict = {
@@ -37,7 +38,8 @@ last_round_dict = {
 
 curr_round_action_dict = {
     Stats.FEED: 0,
-    Stats.SELL: 0
+    Stats.SELL: 0,
+    Stats.PLANTED: 0
 }
 
 
@@ -56,12 +58,38 @@ class Hamurabi(object):
             # This should be moved to a Method Later
             amount = askHowMuchGrainToFeedThePeople(int(player_input('HOW MUCH WOULD YOU LIKE TO FEED YOUR PEOPLE?')))
             if can_purchase(game_dict, *amount):
-                print(f'YOU HAVE FED YOUR PEOPLE {curr_round_action_dict.get(Stats.FEED)} BUSHEL(S) EACH')
+                transaction = curr_round_action_dict.get(Stats.FEED)
+                print(f'YOU HAVE FED YOUR PEOPLE {transaction} BUSHEL(S) EACH')
+                purchase(game_dict, Stats.BUSHELS, transaction)
             # lineBreak
-            amount = askHowManyAcresToBuy(int(player_input('HOW MUCH WOULD YOU LIKE TO FEED YOUR PEOPLE?')))
+            # status_print('CURRENTLY:')
+            # lineBreak
+            print(f'ACRES SELL FOR {game_dict[Stats.LAND_VAL]} BUSHELS EACH,')
+            amount = askHowManyAcresToBuyAndSell(int(player_input('HOW MANY ACRES WOULD YOU LIKE TO SELL?')))
             if can_purchase(game_dict, *amount):
-                print(f'YOU HAVE FED YOUR PEOPLE {curr_round_action_dict.get(Stats.FEED)} BUSHEL(S) EACH')
-
+                sold = curr_round_action_dict.get(Stats.SELL)
+                print(f'YOU HAVE SOLD {sold} ACRES EACH FOR A TOTAL OF {sold * game_dict[Stats.LAND_VAL]} BUSHELS')
+                purchase(game_dict, Stats.ACRES, sold)
+                purchase(game_dict, Stats.BUSHELS, -sold * game_dict[Stats.LAND_VAL])
+            # lineBreak
+            # status_print('CURRENTLY:')
+            # lineBreak
+            print(f'ACRES COST {game_dict[Stats.LAND_VAL]} BUSHELS EACH,')
+            amount = askHowManyAcresToBuyAndSell(int(player_input('HOW MANY ACRES WOULD YOU LIKE TO BUY?')))
+            if can_purchase(game_dict, *amount):
+                sold = curr_round_action_dict.get(Stats.SELL)
+                print(f'YOU HAVE PURCHASED {sold} ACRES EACH FOR A TOTAL OF {sold * game_dict[Stats.LAND_VAL]} BUSHELS')
+                purchase(game_dict, Stats.ACRES, -sold)
+                purchase(game_dict, Stats.BUSHELS, sold * game_dict[Stats.LAND_VAL])
+            # lineBreak
+            # status_print('CURRENTLY:')
+            # lineBreak --START HERE ADAM
+            # amount = askHowManyAcresToPlant(int(player_input('HOW MANY ACRES WOULD YOU LIKE TO PLANT?')))
+            # if can_purchase(game_dict, *amount):
+            #     sold = curr_round_action_dict.get(Stats.SELL)
+            #     print(f'YOU HAVE PLANTED {sold} ACRES EACH FOR A TOTAL OF {sold * game_dict[Stats.LAND_VAL]} BUSHELS')
+            #     purchase(game_dict, Stats.ACRES, -sold)
+            #     purchase(game_dict, Stats.BUSHELS, sold * game_dict[Stats.LAND_VAL])
             # The above should be moved to a Method Later
             print_summary()
 
@@ -78,13 +106,14 @@ class Hamurabi(object):
     ## lots more functions here...
 
 
-def purchase(dict_stat: dict, value: int):  # Issue Here, Need amounts
+def purchase(dict: dict, stat: Stats, value: int):  # Issue Here, Need amounts
     """
-    :param dict_stat: The dictionary and the key
-    :param value:
+    :param dict: The Dictionary
+    :param stat: The Key
+    :param value: The Reduction
     :return:
     """
-    dict_stat = dict_stat - value
+    dict[stat] = dict[stat] - value
 
 
 # Updates Last Round Dictionary
@@ -155,21 +184,14 @@ def player_input(text='text_not_submitted_for_input') -> str:
     return input(text + ' ')
 
 
-def askHowManyAcresToBuy(user_input):
-    """Ask player how many acres to buy and return that number"""
-    print('HOW MANY ACRES WOULD YOU LIKE TO BUY?')
-    print(f'EACH ACRE COSTS {game_dict.get(Stats.LAND_VAL)} BUSHELS')
-    return user_input * game_dict.get(Stats.LAND_VAL), Stats.BUSHELS
-
-
-def askHowManyAcresToSell(user_input):
+def askHowManyAcresToBuyAndSell(user_input):
     """
-    Takes User input and Applies it to Current Round Action Dictionary for Feed
+    Ask player how many acres to sell and return the cost
     :param user_input:
     :return:
     """
-    curr_round_action_dict[Stats.SELL] = user_input
-    return user_input
+    curr_round_action_dict[Stats.SELL] = user_input  # * game_dict.get(Stats.LAND_VAL)
+    return user_input, Stats.ACRES
 
 
 def askHowMuchGrainToFeedThePeople(user_input: int):

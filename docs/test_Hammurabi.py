@@ -32,7 +32,13 @@ class Test(TestCase):
         self.fail()
 
     def test_plague_deaths(self):
-        self.fail()
+        test_cases = [(100, 50, 50),
+                      (1000, 500, 500),
+                      (305, 153, 152)]
+
+        for(pop, deaths, actual) in test_cases:
+            with self.subTest(f"{pop}, {deaths}, {actual}"):
+                self.assertEqual(actual, Hammurabi.plagueDeaths(pop))
 
     def test_starvation_deaths(self):
         test_cases = [

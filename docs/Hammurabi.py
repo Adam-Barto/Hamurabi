@@ -190,10 +190,12 @@ def askHowManyAcresToPlant(user_input):
     # An issue here, The math is off, Reformat to Math change value
     return user_input * game_dict.get(Stats.BUSHELS), Stats.BUSHELS
 
-
 def plagueDeaths(population):
-    """15% chance of plague each year, return that number, possibly 0"""
-    pass
+    """15% chance of plague each year, killing 50% of population. Return that number, possibly 0"""
+    if random.random() < 0.15:
+        plaguePop = ceil(population * 0.5)
+        return population - plaguePop
+
 
 
 def starvationDeaths(population, bushelsFedToPeople):

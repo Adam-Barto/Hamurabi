@@ -229,13 +229,20 @@ def starvationDeaths(population, bushelsFedToPeople):
 
 def uprising(population, howManyPeopleStarved):
     """return True if 45% of people starve, auto-end game"""
-    pass
+    rebels = ceil(howManyPeopleStarved / population) * 100 >= 45
+    if rebels:
+        return True
+        print("DEATH TO HAMMURABI")
+        print("GAME OVER")
+    else :
+        return False
 
 
 def immigrants(population, acresOwned, grainInStorage):
     """Nobody comes to city if subjects starving, don't call method. If subjects happy calculate immigrants as
     (20 * _number of acres you have_ + _amount of grain you have in storage_) / (100 * _population_) + 1"""
-    pass
+    moshulu = ((20 * acresOwned) + grainInStorage) / ((100 * population) + 1)
+    return moshulu
 
 
 def harvest(acres, bushelsUsedAsSeed):
@@ -244,10 +251,12 @@ def harvest(acres, bushelsUsedAsSeed):
 
 
 def grainEatenByRats(bushels):
-    """40% of rat infestation, rats eat 10%-30% of of grain. Return number of bushel eaten, possibly 0"""
-    pass
-
-
+    """40% of rat infestation, rats eat 10%-30% of grain. Return number of bushel eaten, possibly 0"""
+    if random.random() < 0.4:
+        grain_eaten = ceil((random.randint(10, 30) * bushels) / 100)
+        return bushels - grain_eaten
+    else:
+        return 0
 def newCostOfLand():
     """Price of land is random from 17 to 23 bushels per acre. Return new price for next
     set of player decision to buy or sell land"""
@@ -261,7 +270,7 @@ def print_summary():
 
 
 def finalSummary():
-    """Print final summary of game he usual evaluation is based on how many people starved,
+    """Print final summary of game the usual evaluation is based on how many people starved,
     and how many acres per person you end up with for example"""
     pass
 

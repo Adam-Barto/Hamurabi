@@ -52,7 +52,14 @@ class Test(TestCase):
                 self.assertEqual(actual, Hammurabi.starvationDeaths(pop, food))
 
     def test_uprising(self):
-        self.fail()
+        test_cases = [(100, 45, True),
+                      (1000, 550, True),
+                      (305, 153, True),
+                      (100, 35, 35)]
+        for (pop, starve, actual) in test_cases:
+            with self.subTest(f"{pop}, {starve}, {actual}"):
+                expected = Hammurabi.uprising(pop, starve)
+                self.assertAlmostEqual(actual, expected)
 
     def test_immigrants(self):
         self.fail()
@@ -61,6 +68,15 @@ class Test(TestCase):
         self.fail()
 
     def test_grain_eaten_by_rats(self):
+        test_cases = [
+            (100, 19, 5),
+            (1000, 20, 0),
+            (32, 5, 24)
+        ]
+        for (bushels, eaten, actual) in test_cases:
+            with self.subTest(f"{bushels}, {eaten},{actual}"):
+                self.assertEqual(actual, Hammurabi.grainEatenByRats(bushels))
+
         self.fail()
 
     def test_new_cost_of_land(self):

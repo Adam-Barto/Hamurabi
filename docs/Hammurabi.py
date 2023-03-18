@@ -59,8 +59,16 @@ class Hamurabi(object):
                 print(f'YOU HAVE FED YOUR PEOPLE {curr_round_action_dict.get(Stats.FEED)} BUSHEL(S) EACH')
 
             # The above should be moved to a Method Later
+            hungry_deaths = starvationDeaths(game_dict[Stats.PEOPLE], curr_round_action_dict[Stats.FEED])
+            game_dict[Stats.PEOPLE] = game_dict[Stats.PEOPLE] - hungry_deaths
+            print(f'{hungry_deaths} People Died Due to Starvation')
+
+
             last_round_update()
+
             game_dict[Stats.YEAR] = game_dict[Stats.YEAR] + 1
+            player_input('Press any Key to continue')
+            print(line_break * 2)
 
         finalSummary()
 
@@ -168,7 +176,7 @@ def askHowMuchGrainToFeedThePeople(user_input: int):
     :return:
     """
     curr_round_action_dict[Stats.FEED] = user_input
-    return user_input, game_dict[Stats.BUSHELS]
+    return user_input*game_dict[Stats.PEOPLE], Stats.BUSHELS
 
 
 def askHowManyAcresToPlant(user_input):

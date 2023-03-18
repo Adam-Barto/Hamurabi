@@ -284,7 +284,7 @@ def grainEatenByRats(bushels):
     """40% of rat infestation, rats eat 10%-30% of grain. Return number of bushel eaten, possibly 0"""
     if random.random() < 0.4:
         grain_eaten = ceil((random.randint(10, 30) * bushels) / 100)
-        return bushels - grain_eaten
+        return grain_eaten
     else:
         return 0
 def newCostOfLand():

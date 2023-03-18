@@ -71,15 +71,13 @@ class Test(TestCase):
 
     def test_grain_eaten_by_rats(self):
         test_cases = [
-            (100, 19, 5),
-            (1000, 20, 0),
-            (32, 5, 24)
+            (100, 19),
+            (1000, 210),
+            (32, 10)
         ]
-        for (bushels, eaten, actual) in test_cases:
-            with self.subTest(f"{bushels}, {eaten},{actual}"):
-                self.assertEqual(actual, Hammurabi.grainEatenByRats(bushels))
-
-        self.fail()
+        for (bushels, actual) in test_cases:
+            with self.subTest(f"{bushels},{actual}"):
+                self.assertAlmostEqual(actual, Hammurabi.grainEatenByRats(bushels), delta=actual)
 
     def test_new_cost_of_land(self):
         self.fail()

@@ -234,7 +234,7 @@ def askHowMuchGrainToFeedThePeople():
     while type(can_purchase(game_dict, value * game_dict[Stats.PEOPLE], Stats.BUSHELS)) == bool:  # Shortening this breaks the code
         value = int(player_input(text))
 
-    curr_round_action_dict[Stats.FEED] = can_purchase(game_dict, value * game_dict[Stats.PEOPLE], Stats.BUSHELS)
+    curr_round_action_dict[Stats.FEED] = can_purchase(game_dict, value, Stats.BUSHELS)
 
     transaction = curr_round_action_dict.get(Stats.FEED)
     print(f'YOU HAVE FED YOUR PEOPLE {transaction} BUSHEL(S) EACH')

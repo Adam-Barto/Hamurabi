@@ -57,7 +57,7 @@ class Test(TestCase):
         test_cases = [(100, 45, True),
                       (1000, 550, True),
                       (305, 153, True),
-                      (100, 35, 35)]
+                      (100, 35, False)]
         for (pop, starve, actual) in test_cases:
             with self.subTest(f"{pop}, {starve}, {actual}"):
                 expected = Hammurabi.uprising(pop, starve)

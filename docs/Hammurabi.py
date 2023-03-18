@@ -259,7 +259,7 @@ def starvationDeaths(population, bushelsFedToPeople):
 
 def uprising(population, howManyPeopleStarved):
     """return True if 45% of people starve, auto-end game"""
-    rebels = ceil(howManyPeopleStarved / population) * 100 >= 45
+    rebels = (howManyPeopleStarved / population) * 100 >= 45
     if rebels:
         return True
         print("DEATH TO HAMMURABI")

@@ -1,3 +1,4 @@
+from math import ceil
 import random
 from enum import Enum
 
@@ -6,15 +7,15 @@ line_break = '-' * 10
 
 # starter variables
 class Stats(Enum):
-    SELL = None
-    YEAR = None
-    PEOPLE = None
-    BUSHELS = None
-    ACRES = None
-    LAND_VAL = None
-    END = None
-    LABOUR = None
-    FEED = 20  # Empty
+    SELL = 0
+    YEAR = 1
+    PEOPLE = 2
+    BUSHELS = 3
+    ACRES = 4
+    LAND_VAL = 5
+    END = 6
+    LABOUR = 7
+    FEED = 8  # Empty
 
 
 game_dict = {
@@ -130,7 +131,7 @@ def status_print(text: str) -> None:
     print(text)
     print(line_break)
     show_value(game_dict.get(Stats.PEOPLE), 'PEOPLE')
-    show_value(game_dict.get(Stats.BUSHELS), 'BUSHELS')
+    show_value(game_dict.get(Stats.BUSHELS), Stats.BUSHELS.name)
     show_value(game_dict.get(Stats.ACRES), 'ACRES')
 
 
@@ -187,7 +188,8 @@ def plagueDeaths(population):
 def starvationDeaths(population, bushelsFedToPeople):
     """Each subject needs 20 bushels to survive, more makes them happy but not necessary
     No benefit to happy subjects. Return number of starvation deaths, possibly 0 """
-    pass
+    value = ceil((population * bushelsFedToPeople) / 20)
+    return population - value
 
 
 def uprising(population, howManyPeopleStarved):

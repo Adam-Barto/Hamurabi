@@ -35,7 +35,9 @@ class Test(TestCase):
         self.fail()
 
     def test_starvation_deaths(self):
-        self.fail()
+        actual = 5
+        expected = Hammurabi.starvationDeaths(100, 19)
+        self.assertEqual(actual, expected)
 
     def test_uprising(self):
         self.fail()

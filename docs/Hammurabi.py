@@ -14,6 +14,16 @@ class Hamurabi(object):
         "Let's play!"
     ## lots more functions here...
 
+
+def player_input(text='') -> str:
+    """
+    Takes a string from the code to decide what to display, then returns input.
+    No test: due to the simplicity of the code.
+    :param text: The string in question.
+    :return: returns a string, so be sure to convert it for the variables
+    """
+    return input(text + ' ')
+
 def askHowManyAcresToBuy(price, bushels) :
     """Ask player how many acres to buy and return that number"""
     pass

@@ -35,9 +35,14 @@ class Test(TestCase):
         self.fail()
 
     def test_starvation_deaths(self):
-        actual = 5
-        expected = Hammurabi.starvationDeaths(100, 19)
-        self.assertEqual(actual, expected)
+        test_cases = [
+            (100, 19, 5),
+            (1000, 20, 0),
+            (32, 5, 24)
+        ]
+        for (pop, food, actual) in test_cases:
+            with self.subTest(f"{pop}, {food},{actual}"):
+                self.assertEqual(actual, Hammurabi.starvationDeaths(pop, food))
 
     def test_uprising(self):
         self.fail()

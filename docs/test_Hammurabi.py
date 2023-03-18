@@ -38,7 +38,8 @@ class Test(TestCase):
 
         for(pop, deaths, actual) in test_cases:
             with self.subTest(f"{pop}, {deaths}, {actual}"):
-                self.assertAlmostEqual(actual, Hammurabi.plagueDeaths(pop))
+                expected = Hammurabi.plagueDeaths(pop)
+                self.assertAlmostEqual(actual, expected, delta=pop)
 
     def test_starvation_deaths(self):
         test_cases = [

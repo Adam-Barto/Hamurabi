@@ -45,7 +45,9 @@ class Test(TestCase):
         test_cases = [
             (100, 19, 5),
             (1000, 20, 0),
-            (32, 5, 24)
+            (32, 5, 24),
+            (100, 30, 0),
+            (1000, 41, 0),
         ]
         for (pop, food, actual) in test_cases:
             with self.subTest(f"{pop}, {food},{actual}"):

@@ -3,6 +3,7 @@ import random
 from enum import Enum
 
 line_break = '-' * 10
+save_number = 0
 
 
 # starter variables
@@ -17,6 +18,7 @@ class Stats(Enum):
     LABOUR = 7
     FEED = 8
     PLANTED = 9
+    SAVED_NUMBER = 10
 
 
 game_dict = {
@@ -26,7 +28,7 @@ game_dict = {
     Stats.BUSHELS: 2800,  # grain in storage
     Stats.ACRES: 1000,
     Stats.LAND_VAL: 19,  # bushels/acre
-    Stats.LABOUR: 1  # How Many People are needed to Plant An Acre
+    Stats.LABOUR: 10  # How Many People are needed to Plant An Acre
 }
 
 last_round_dict = {
@@ -39,7 +41,8 @@ last_round_dict = {
 curr_round_action_dict = {
     Stats.FEED: 0,
     Stats.SELL: 0,
-    Stats.PLANTED: 0
+    Stats.PLANTED: 0,
+    Stats.SAVED_NUMBER: 0
 }
 
 
@@ -65,7 +68,7 @@ class Hamurabi(object):
             # status_print('CURRENTLY:')
             # lineBreak
             print(f'ACRES SELL FOR {game_dict[Stats.LAND_VAL]} BUSHELS EACH,')
-            amount = askHowManyAcresToBuyAndSell(int(player_input('HOW MANY ACRES WOULD YOU LIKE TO SELL?')))
+            amount = askHowManyAcresToSell(int(player_input('HOW MANY ACRES WOULD YOU LIKE TO SELL?')))
             if can_purchase(game_dict, *amount):
                 sold = curr_round_action_dict.get(Stats.SELL)
                 print(f'YOU HAVE SOLD {sold} ACRES EACH FOR A TOTAL OF {sold * game_dict[Stats.LAND_VAL]} BUSHELS')
@@ -75,25 +78,28 @@ class Hamurabi(object):
             # status_print('CURRENTLY:')
             # lineBreak
             print(f'ACRES COST {game_dict[Stats.LAND_VAL]} BUSHELS EACH,')
-            amount = askHowManyAcresToBuyAndSell(int(player_input('HOW MANY ACRES WOULD YOU LIKE TO BUY?')))
+            amount = askHowManyAcresToBuy(int(player_input('HOW MANY ACRES WOULD YOU LIKE TO BUY?')))
             if can_purchase(game_dict, *amount):
-                sold = curr_round_action_dict.get(Stats.SELL)
-                print(f'YOU HAVE PURCHASED {sold} ACRES EACH FOR A TOTAL OF {sold * game_dict[Stats.LAND_VAL]} BUSHELS')
-                purchase(game_dict, Stats.ACRES, -sold)
-                purchase(game_dict, Stats.BUSHELS, sold * game_dict[Stats.LAND_VAL])
+                purchased = curr_round_action_dict.get(Stats.SELL)
+                print(
+                    f'YOU HAVE PURCHASED {purchased} ACRES EACH FOR A TOTAL OF {purchased * game_dict[Stats.LAND_VAL]} BUSHELS')
+                purchase(game_dict, Stats.ACRES, -purchased)
+                purchase(game_dict, Stats.BUSHELS, purchased * game_dict[Stats.LAND_VAL])
             # lineBreak
             # status_print('CURRENTLY:')
-            # lineBreak --START HERE ADAM
-            # amount = askHowManyAcresToPlant(int(player_input('HOW MANY ACRES WOULD YOU LIKE TO PLANT?')))
-            # if can_purchase(game_dict, *amount):
-            #     sold = curr_round_action_dict.get(Stats.SELL)
-            #     print(f'YOU HAVE PLANTED {sold} ACRES EACH FOR A TOTAL OF {sold * game_dict[Stats.LAND_VAL]} BUSHELS')
-            #     purchase(game_dict, Stats.ACRES, -sold)
-            #     purchase(game_dict, Stats.BUSHELS, sold * game_dict[Stats.LAND_VAL])
+            # lineBreak
+            print(f'EACH ACRE NEEDS {game_dict.get(Stats.LABOUR)} PEOPLE TO PLANT')
+            amount = askHowManyAcresToPlant(int(player_input('HOW MANY ACRES WOULD YOU LIKE TO PLANT?')))
+            if can_purchase(game_dict, *amount):
+                planted = curr_round_action_dict.get(Stats.PLANTED)
+                print(f'YOU HAVE PLANTED {planted} ACRES OUT OF YOUR {game_dict[Stats.ACRES]} ACRES')
+                purchase(game_dict, Stats.BUSHELS, planted)
             # The above should be moved to a Method Later
+            print(line_break)
+            status_print('CURRENTLY MY LORD YOU HAVE:')
             print_summary()
 
-  #  Cool Cheese
+            #  Cool Cheese
 
             last_round_update()
 
@@ -122,21 +128,25 @@ def last_round_update():
         last_round_dict[i] = game_dict.get(i)
 
 
-def can_purchase(has_amount: dict, amount_buying: int, stats: Stats) -> bool:
+def can_purchase(has_amount, amount_buying: int, stat: Stats):
     """
     :param has_amount: The Dictionary to focus on.
     :param amount_buying:  The Amount purchasing as an Int
     :param stats: The Enum Value
     :return: bool value
     """
-    if has_amount[stats] == 0:  # This should hopefully never trigger in later versions.
-        print(f'YOU DO NOT HAVE ANY {stats.name}')
+    if has_amount.get(stat) == 0:  # This should hopefully never trigger in later versions.
+        print(f'YOU DO NOT HAVE ANY {stat.name}')
+        curr_round_action_dict[Stats.SAVED_NUMBER] = 0
         return False
-    elif amount_buying <= has_amount[stats]:
+    if has_amount.get(stat) >= amount_buying:
+        curr_round_action_dict[Stats.SAVED_NUMBER] = amount_buying
         return True
     else:
-        print(f'YOU DO NOT HAVE ENOUGH {stats.name}')
-        return can_purchase(has_amount, int(player_input('MY LORD PLEASE GIVE ME A PROPER AMOUNT')), stats)
+        print(f'YOU DO NOT HAVE {amount_buying} OF {stat.name}')
+        print(f'YOU HAVE {has_amount} OF {stat.name}')
+        text = int(player_input('PLEASE GIVE ME A PROPER AMOUNT'))
+    return can_purchase(has_amount, text, stat)
 
 
 # Have you done a good job between rounds?
@@ -184,13 +194,28 @@ def player_input(text='text_not_submitted_for_input') -> str:
     return input(text + ' ')
 
 
-def askHowManyAcresToBuyAndSell(user_input):
+def askHowManyAcresToBuy(user_input):
     """
     Ask player how many acres to sell and return the cost
     :param user_input:
     :return:
     """
-    curr_round_action_dict[Stats.SELL] = user_input  # * game_dict.get(Stats.LAND_VAL)
+    value = user_input * game_dict[Stats.LAND_VAL]
+    if can_purchase(game_dict, value, Stats.BUSHELS):
+        curr_round_action_dict[Stats.SELL] = curr_round_action_dict[
+            Stats.SAVED_NUMBER]  # * game_dict.get(Stats.LAND_VAL)
+    return user_input, Stats.ACRES
+
+
+def askHowManyAcresToSell(user_input):
+    """
+    Ask player how many acres to sell and return the cost
+    :param user_input:
+    :return:
+    """
+    if can_purchase(game_dict, user_input, Stats.ACRES):
+        curr_round_action_dict[Stats.SELL] = curr_round_action_dict[
+            Stats.SAVED_NUMBER]  # * game_dict.get(Stats.LAND_VAL)
     return user_input, Stats.ACRES
 
 
@@ -200,17 +225,21 @@ def askHowMuchGrainToFeedThePeople(user_input: int):
     :param user_input:
     :return:
     """
-    curr_round_action_dict[Stats.FEED] = user_input
-    return user_input*game_dict[Stats.PEOPLE], Stats.BUSHELS
+    if can_purchase(game_dict, user_input * game_dict[Stats.PEOPLE], Stats.BUSHELS):
+        curr_round_action_dict[Stats.FEED] = user_input * game_dict[Stats.PEOPLE]
+    return user_input * game_dict[Stats.PEOPLE], Stats.BUSHELS
 
 
 def askHowManyAcresToPlant(user_input):
     """Ask player how many acres to plant with grain and returns that number
     Must have enough grain and people to do the planting. Left over grain goes to storage"""
-    print('HOW MANY ACRES WOULD YOU LIKE TO PLANT')
-    print(f'EACH ACRE NEEDS {0} BUSHELS TO PLANT AND {game_dict.get(Stats.LABOUR)} PEOPLE TO PLANT')
-    # An issue here, The math is off, Reformat to Math change value
-    return user_input * game_dict.get(Stats.BUSHELS), Stats.BUSHELS
+    cost_of_labour = game_dict[Stats.PEOPLE] * game_dict[Stats.LABOUR]
+    if can_purchase(game_dict, cost_of_labour, Stats.PEOPLE):
+        curr_round_action_dict[Stats.PLANTED] = curr_round_action_dict[Stats.SAVED_NUMBER]
+        # return user_input, Stats.BUSHELS
+
+    return user_input, Stats.BUSHELS
+
 
 def plagueDeaths(population):
     """15% chance of plague each year, killing 50% of population. Return that number, possibly 0"""
@@ -219,6 +248,7 @@ def plagueDeaths(population):
         return population - plague_pop
     else:
         return 0
+
 
 def starvationDeaths(population, bushelsFedToPeople):
     """Each subject needs 20 bushels to survive, more makes them happy but not necessary

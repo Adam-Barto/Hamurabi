@@ -57,7 +57,7 @@ class Hamurabi(object):
             amount = askHowMuchGrainToFeedThePeople(int(player_input('HOW MUCH WOULD YOU LIKE TO FEED YOUR PEOPLE?')))
             if can_purchase(game_dict, *amount):
                 print(f'YOU HAVE FED YOUR PEOPLE {curr_round_action_dict.get(Stats.FEED)} BUSHEL(S) EACH')
-                    #Adams Test Comment
+
             # The above should be moved to a Method Later
             print_summary()
 

@@ -215,8 +215,8 @@ def askHowManyAcresToPlant(user_input):
 def plagueDeaths(population):
     """15% chance of plague each year, killing 50% of population. Return that number, possibly 0"""
     if random.random() < 0.15:
-        plaguePop = ceil(population * 0.5)
-        return population - plaguePop
+        plague_pop = ceil(population * 0.5)
+        return population - plague_pop
     else:
         return 0
 

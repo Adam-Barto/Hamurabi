@@ -299,7 +299,7 @@ def harvest(acres):
     """choose randNum 1-6 inclusive, bushelsUsedAsSeed = acres * randNum"""
     # bushelsUsedAsSeed is redundant, removed from parameters for time being
     rand_num = random.randint(1, 6)
-    bushels_harvested= acres * rand_num
+    bushels_harvested = acres * rand_num
     return bushels_harvested
 
 

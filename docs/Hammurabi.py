@@ -324,10 +324,28 @@ def print_summary():
     game_dict[Stats.PEOPLE] = game_dict[Stats.PEOPLE] - hungry_deaths
     print(f'{hungry_deaths} People Died Due to Starvation')
 
+    plague_deaths = plagueDeaths(game_dict[Stats.PEOPLE], curr_round_action_dict[Stats.FEED])
+    game_dict[Stats.PEOPLE] = game_dict[Stats.PEOPLE] - plague_deaths
+    print(f'{plague_deaths} People Died Due to Plague')
+
+    # bushels_harvested = harvest(game_dict[Stats.BUSHELS], curr_round_action_dict[Stats.BUSHELS])
+    # game_dict[Stats. = game_dict[Stats.PEOPLE] - hungry_deaths
+    # print(f'{hungry_deaths} People Died Due to Starvation')
+
+    rat_food = grainEatenByRats(game_dict[Stats.BUSHELS, curr_round_action_dict[Stats.BUSHELS])
+    game_dict[Stats.BUSHELS] = game_dict[Stats.BUSHELS - rat_food
+    print(f'{rat_food} Bushels Eaten By Rats')
+
 
 def finalSummary():
     """Print final summary of game the usual evaluation is based on how many people starved,
     and how many acres per person you end up with for example"""
+    # Total years of reign
+    # Total immigrants
+    # Total land owned
+    # Final land worth in bushels per acre
+
+
     pass
 
 

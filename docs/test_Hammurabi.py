@@ -37,8 +37,11 @@ class Test(TestCase):
     def test_status_print(self):
         self.fail()
 
-    def test_player_input(self):
-        self.fail()
+    @patch('Hammurabi.player_input',return_value = 'Test Time')
+    def test_player_input(self, value):
+        actual = 'Test Time'
+        expected = Hammurabi.player_input()
+        self.assertEqual(actual, expected)
 
     @patch('Hammurabi.player_input', return_value='10')
     def test_ask_how_many_acres_to_buy(self, value):

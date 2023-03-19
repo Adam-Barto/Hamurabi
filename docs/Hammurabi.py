@@ -285,15 +285,19 @@ def uprising(population, howManyPeopleStarved):
 
 
 def immigrants(population, acresOwned, grainInStorage):
-    """Nobody comes to city if subjects starving, don't call method. If subjects happy calculate immigrants as
+    """Nobody comes to city if subjects starving, don't call this method. If subjects happy calculate immigrants as
     (20 * _number of acres you have_ + _amount of grain you have in storage_) / (100 * _population_) + 1"""
-    moshulu = ((20 * acresOwned) + grainInStorage) / ((100 * population) + 1)
-    return moshulu
+    # come up with way to figure out whether or not population is happy
+    moshulu_imms = ((20 * acresOwned) + grainInStorage) / ((100 * population) + 1)
+    return moshulu_imms
 
 
-def harvest(acres, bushelsUsedAsSeed):
+def harvest(acres):
     """choose randNum 1-6 inclusive, bushelsUsedAsSeed = acres * randNum"""
-    pass
+    # bushelsUsedAsSeed is redundant, removed from parameters for time being
+    rand_num = random.randint(1, 6)
+    bushels_harvested= acres * rand_num
+    return bushels_harvested
 
 
 def grainEatenByRats(bushels):
@@ -308,7 +312,8 @@ def grainEatenByRats(bushels):
 def newCostOfLand():
     """Price of land is random from 17 to 23 bushels per acre. Return new price for next
     set of player decision to buy or sell land"""
-    pass
+    new_price = random.randint(17, 23)
+    return new_price
 
 
 def print_summary():

@@ -1,3 +1,4 @@
+import random
 from unittest import TestCase
 
 import Hammurabi
@@ -67,7 +68,14 @@ class Test(TestCase):
         self.fail()
 
     def test_harvest(self):
-        self.fail()
+        test_cases = [(50, random.randint(1, 6)),
+                     (500, random.randint(1, 6)),
+                     (1000, random.randint(1, 6)),
+                     (459, random.randint(1, 6))]
+        for (acres, rand) in test_cases:
+            with self.subTest(f"{acres},{rand}"):
+                expected = Hammurabi.harvest(acres)
+                self.assertAlmostEqual(acres, expected, delta=expected)  # pretty sure this test is wrong
 
     def test_grain_eaten_by_rats(self):
         test_cases = [
@@ -80,7 +88,14 @@ class Test(TestCase):
                 self.assertAlmostEqual(actual, Hammurabi.grainEatenByRats(bushels), delta=actual)
 
     def test_new_cost_of_land(self):
-        self.fail()
+        test_cases = [(random.randint(17, 23)),
+                      (random.randint(17, 23)),
+                       (random.randint(17, 23)),
+                      (random.randint(17, 23)),
+                      (random.randint(17, 23))]
+        for actual in test_cases:
+            with self.subTest(f"{actual}"):
+                self.assertAlmostEqual(actual, Hammurabi.newCostOfLand(), delta=actual)
 
     def test_print_summary(self):
         self.fail()

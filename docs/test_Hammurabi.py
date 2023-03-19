@@ -1,6 +1,7 @@
 import random
 from enum import Enum
 from unittest import TestCase
+from unittest.mock import patch
 
 import Hammurabi
 
@@ -39,17 +40,62 @@ class Test(TestCase):
     def test_player_input(self):
         self.fail()
 
-    def test_ask_how_many_acres_to_buy(self):
-        self.fail()
+    @patch('Hammurabi.player_input', return_value='10')
+    def test_ask_how_many_acres_to_buy(self, value):
+        actual = 10
+        Hammurabi.askHowManyAcresToBuy()
+        expected = Hammurabi.curr_round_action_dict.get(Hammurabi.Stats.SELL)
+        self.assertEqual(actual, expected)
 
-    def test_ask_how_many_acres_to_sell(self):
-        self.fail()
+    @patch('Hammurabi.player_input', return_value='100')
+    def test_ask_how_many_acres_to_buy2(self, value):
+        actual = 100
+        Hammurabi.askHowManyAcresToBuy()
+        expected = Hammurabi.curr_round_action_dict.get(Hammurabi.Stats.SELL)
+        self.assertEqual(actual, expected)
 
-    def test_ask_how_much_grain_to_feed_the_people(self):
-        self.fail()
+    @patch('Hammurabi.player_input', return_value='10')
+    def test_ask_how_many_acres_to_sell(self, value):
+        actual = 10
+        Hammurabi.askHowManyAcresToSell()
+        expected = Hammurabi.curr_round_action_dict.get(Hammurabi.Stats.SELL)
+        self.assertEqual(actual, expected)
 
-    def test_ask_how_many_acres_to_plant(self):
-        self.fail()
+    @patch('Hammurabi.player_input', return_value='100')
+    def test_ask_how_many_acres_to_sell2(self, value):
+        actual = 100
+        Hammurabi.askHowManyAcresToSell()
+        expected = Hammurabi.curr_round_action_dict.get(Hammurabi.Stats.SELL)
+        self.assertEqual(actual, expected)
+
+    @patch('Hammurabi.player_input', return_value='10')
+    def ask_how_much_grain_to_feed_the_people(self, value):
+        actual = 10
+        Hammurabi.askHowMuchGrainToFeedThePeople()
+        expected = Hammurabi.curr_round_action_dict.get(Hammurabi.Stats.FEED)
+        self.assertEqual(actual, expected)
+
+    @patch('Hammurabi.player_input', return_value='100')
+    def ask_how_much_grain_to_feed_the_people2(self, value):
+        actual = 100
+        Hammurabi.askHowMuchGrainToFeedThePeople()
+        expected = Hammurabi.curr_round_action_dict.get(Hammurabi.Stats.FEED)
+        self.assertEqual(actual, expected)
+
+
+    @patch('Hammurabi.player_input', return_value='2')
+    def test_askHowManyAcresToPlant2(self, value):
+        actual = 5
+        Hammurabi.askHowManyAcresToPlant()
+        expected = Hammurabi.curr_round_action_dict.get(Hammurabi.Stats.PLANTED)
+        self.assertEqual(actual, expected)
+
+    @patch('Hammurabi.player_input', return_value='10')
+    def test_askHowManyAcresToPlant2(self, value):
+        actual = 100
+        Hammurabi.askHowManyAcresToPlant()
+        expected = Hammurabi.curr_round_action_dict.get(Hammurabi.Stats.PLANTED)
+        self.assertEqual(actual, expected)
 
     def test_plague_deaths(self):
         test_cases = [(100, 50, 50),

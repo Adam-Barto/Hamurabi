@@ -270,6 +270,9 @@ def starvationDeaths(population, bushelsFedToPeople):
     """Each subject needs 20 bushels to survive, more makes them happy but not necessary
     No benefit to happy subjects. Return number of starvation deaths, possibly 0 """
     value = ceil((population * bushelsFedToPeople) / 20)
+    deaths = population - value
+    if deaths < 0:
+        return 0
     return population - value
 
 

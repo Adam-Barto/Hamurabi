@@ -332,8 +332,8 @@ def print_summary():
     # game_dict[Stats. = game_dict[Stats.PEOPLE] - hungry_deaths
     # print(f'{hungry_deaths} People Died Due to Starvation')
 
-    rat_food = grainEatenByRats(game_dict[Stats.BUSHELS, curr_round_action_dict[Stats.BUSHELS])
-    game_dict[Stats.BUSHELS] = game_dict[Stats.BUSHELS - rat_food
+    rat_food = grainEatenByRats(game_dict[Stats.BUSHELS], curr_round_action_dict[Stats.BUSHELS])
+    game_dict[Stats.BUSHELS] = game_dict[Stats.BUSHELS] - rat_food
     print(f'{rat_food} Bushels Eaten By Rats')
 
 

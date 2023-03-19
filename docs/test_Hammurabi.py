@@ -1,12 +1,31 @@
 import random
+from enum import Enum
 from unittest import TestCase
 
 import Hammurabi
+
+
 class Test(TestCase):
 
     def test_can_purchase(self):
-        Hammurabi.can_purchase()
-        self.fail()
+        class Stats(Enum):
+            ONE = 0
+            TWO = 1
+            THREE = 2
+
+        test_dict = {
+            Stats.ONE: 1,
+            Stats.TWO: 32,
+            Stats.THREE: 83
+        }
+        test_cases = [(test_dict, 50, Stats.ONE, False),
+                      (test_dict, 31, Stats.TWO, 31),
+                      (test_dict, 10, Stats.THREE, 10)]
+
+        for (dictionary, increase, enumeration, actual) in test_cases:
+            with self.subTest(f"{dictionary}, {increase}, {enumeration}, {actual}"):
+                expected = Hammurabi.can_purchase(test_dict, increase, enumeration)
+                self.assertEqual(actual, expected)
 
     def test_is_good_diff_between_rounds(self):
         self.fail()
@@ -37,7 +56,7 @@ class Test(TestCase):
                       (1000, 500, 500),
                       (305, 153, 152)]
 
-        for(pop, deaths, actual) in test_cases:
+        for (pop, deaths, actual) in test_cases:
             with self.subTest(f"{pop}, {deaths}, {actual}"):
                 expected = Hammurabi.plagueDeaths(pop)
                 self.assertAlmostEqual(actual, expected, delta=deaths)
@@ -69,9 +88,9 @@ class Test(TestCase):
 
     def test_harvest(self):
         test_cases = [(50, random.randint(1, 6)),
-                     (500, random.randint(1, 6)),
-                     (1000, random.randint(1, 6)),
-                     (459, random.randint(1, 6))]
+                      (500, random.randint(1, 6)),
+                      (1000, random.randint(1, 6)),
+                      (459, random.randint(1, 6))]
         for (acres, rand) in test_cases:
             with self.subTest(f"{acres},{rand}"):
                 expected = Hammurabi.harvest(acres)
@@ -90,7 +109,7 @@ class Test(TestCase):
     def test_new_cost_of_land(self):
         test_cases = [(random.randint(17, 23)),
                       (random.randint(17, 23)),
-                       (random.randint(17, 23)),
+                      (random.randint(17, 23)),
                       (random.randint(17, 23)),
                       (random.randint(17, 23))]
         for actual in test_cases:

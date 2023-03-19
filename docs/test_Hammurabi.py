@@ -28,9 +28,6 @@ class Test(TestCase):
                 expected = Hammurabi.can_purchase(test_dict, increase, enumeration)
                 self.assertEqual(actual, expected)
 
-    def test_is_good_diff_between_rounds(self):
-        self.fail()
-
     def test_show_value(self):
         self.fail()
 
@@ -133,17 +130,15 @@ class Test(TestCase):
                 self.assertAlmostEqual(actual, expected)
 
     def test_immigrants(self):
-        self.fail()
-
-    def test_harvest(self):
-        test_cases = [(50, random.randint(1, 6)),
-                      (500, random.randint(1, 6)),
-                      (1000, random.randint(1, 6)),
-                      (459, random.randint(1, 6))]
-        for (acres, rand) in test_cases:
-            with self.subTest(f"{acres},{rand}"):
-                expected = Hammurabi.harvest(acres)
-                self.assertAlmostEqual(acres, expected, delta=expected)  # pretty sure this test is wrong
+        test_cases = [(100, 1000, 100, 32),
+                      (10, 10, 100, 3),
+                      (100, 1000, 5000, 130),
+                      (100, 1000, 2800, 86)
+                      ]
+        for (people, acres, food, actual) in test_cases:
+            with self.subTest(f"{people}, {acres}, {food}, {actual}"):
+                expected = Hammurabi.immigrants(people, acres, food)
+                self.assertEqual(actual, expected)  # pretty sure this test is wrong
 
     def test_grain_eaten_by_rats(self):
         test_cases = [
@@ -166,9 +161,6 @@ class Test(TestCase):
                 self.assertAlmostEqual(actual, Hammurabi.newCostOfLand(), delta=actual)
 
     def test_print_summary(self):
-        self.fail()
-
-    def test_final_summary(self):
         self.fail()
 
     def test_stats(self):

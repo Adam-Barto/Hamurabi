@@ -81,18 +81,18 @@ class Hamurabi(object):
 
             # The above should be moved to a Method Later
             print(line_break)
-            status_print('CURRENTLY MY LORD YOU HAVE:')
+            # status_print('CURRENTLY MY LORD YOU HAVE:')
             print_summary()
-
-            #  Cool Cheese
-
-            last_round_update()
-
+            # for i in last_round_dict:
+            #     if is_good_diff_between_rounds(i):
+            #         print(f'GREAT HAMMURABI WE HAVE DONE WELL WITH {i.name}')
+            #     else:
+            #         print(f'GREAT HAMMURABI WE HAVE LOST {i.name}')
+            # last_round_update()
             game_dict[Stats.YEAR] = game_dict[Stats.YEAR] + 1
             player_input('Press any Key to continue')
             print(line_break * 2)
 
-        finalSummary()
 
     ## lots more functions here...
 
@@ -139,16 +139,16 @@ def can_purchase(has_amount, amount_buying: int, stat: Stats):
 
 
 # Have you done a good job between rounds?
-def is_good_diff_between_rounds(value):
-    if last_round_dict.get(value) is None:
-        print(f'{value} is Not a Valid Key of last_round_dict!')
-        return 'Break My Code so I can Fix it'
-    if game_dict.get(value) < last_round_dict.get(value):
-        return False
-    elif game_dict.get(value) > last_round_dict.get(value):
-        return True
-    else:
-        return None
+# def is_good_diff_between_rounds(value):
+#     if last_round_dict.get(value) is None:
+#         print(f'{value} is Not a Valid Key of last_round_dict!')
+#         return 'Break My Code so I can Fix it'
+#     if game_dict.get(value) < last_round_dict.get(value):
+#         return False
+#     elif game_dict.get(value) > last_round_dict.get(value):
+#         return True
+#     else:
+#         return None
 
 
 def show_value(value: int, value_name: str) -> None:
@@ -231,7 +231,8 @@ def askHowMuchGrainToFeedThePeople():
     """
     text = 'HOW MUCH WOULD YOU LIKE TO FEED YOUR PEOPLE?'
     value = int(player_input(text))
-    while type(can_purchase(game_dict, value * game_dict[Stats.PEOPLE], Stats.BUSHELS)) == bool:  # Shortening this breaks the code
+    while type(can_purchase(game_dict, value * game_dict[Stats.PEOPLE],
+                            Stats.BUSHELS)) == bool:  # Shortening this breaks the code
         value = int(player_input(text))
 
     curr_round_action_dict[Stats.FEED] = can_purchase(game_dict, value, Stats.BUSHELS)
@@ -291,8 +292,9 @@ def immigrants(population, acresOwned, grainInStorage):
     """Nobody comes to city if subjects starving, don't call this method. If subjects happy calculate immigrants as
     (20 * _number of acres you have_ + _amount of grain you have in storage_) / (100 * _population_) + 1"""
     # come up with way to figure out whether or not population is happy
-    moshulu_imms = ((20 * acresOwned) + grainInStorage) / ((100 * population) + 1)
-    return moshulu_imms
+    value = (20 * (acresOwned + grainInStorage))
+    moshulu_imms = (population // 10) * (value / (100 * population) + 1)
+    return int(moshulu_imms)
 
 
 def harvest(acres):
@@ -320,33 +322,33 @@ def newCostOfLand():
 
 
 def print_summary():
-    hungry_deaths = starvationDeaths(game_dict[Stats.PEOPLE], curr_round_action_dict[Stats.FEED])
-    game_dict[Stats.PEOPLE] = game_dict[Stats.PEOPLE] - hungry_deaths
-    print(f'{hungry_deaths} People Died Due to Starvation')
+    plague_deaths = plagueDeaths(game_dict.get(Stats.PEOPLE))
+    if plague_deaths != 0:
+        game_dict[Stats.PEOPLE] = game_dict.get(Stats.PEOPLE) - plague_deaths
+        print(f'{plague_deaths} PEOPLE DIED FROM PLAGUE')
 
-    plague_deaths = plagueDeaths(game_dict[Stats.PEOPLE], curr_round_action_dict[Stats.FEED])
-    game_dict[Stats.PEOPLE] = game_dict[Stats.PEOPLE] - plague_deaths
-    print(f'{plague_deaths} People Died Due to Plague')
+    bushels_harvested = harvest(curr_round_action_dict.get(Stats.PLANTED))
+    if bushels_harvested != 0:
+        game_dict[Stats.BUSHELS] = game_dict.get(Stats.BUSHELS) + bushels_harvested
+        print(f'OH GREAT HAMMURABI WE HAVE HAD A HARVEST OF {bushels_harvested} BUSHELS')
 
-    # bushels_harvested = harvest(game_dict[Stats.BUSHELS], curr_round_action_dict[Stats.BUSHELS])
-    # game_dict[Stats. = game_dict[Stats.PEOPLE] - hungry_deaths
-    # print(f'{hungry_deaths} People Died Due to Starvation')
+    rat_food = grainEatenByRats(game_dict.get(Stats.BUSHELS))
+    if rat_food != 0:
+        game_dict[Stats.BUSHELS] = game_dict.get(Stats.BUSHELS) - rat_food
+        print(f'OH GREAT HAMMURABI, {rat_food} BUSHELS HAVE BEEN EATEN BY RATS!')
 
-    rat_food = grainEatenByRats(game_dict[Stats.BUSHELS], curr_round_action_dict[Stats.BUSHELS])
-    game_dict[Stats.BUSHELS] = game_dict[Stats.BUSHELS] - rat_food
-    print(f'{rat_food} Bushels Eaten By Rats')
+    hungry_deaths = starvationDeaths(game_dict.get(Stats.PEOPLE), curr_round_action_dict.get(Stats.FEED))
+    if hungry_deaths != 0:
+        game_dict[Stats.PEOPLE] = game_dict.get(Stats.PEOPLE) - hungry_deaths
+        print(f'{hungry_deaths} PEOPLE DIED DUE TO STARVATION!')
+    else:
+        print('THE PEOPLE ARE SATISFIED WITH THEIR FOOD GREAT HAMMURABI!')
+        peeps = immigrants(game_dict.get(Stats.PEOPLE), game_dict.get(Stats.ACRES), game_dict.get(Stats.BUSHELS))
+        game_dict[Stats.PEOPLE] = game_dict.get(Stats.PEOPLE) + peeps
+        print(f'{peeps} IMMIGRANTS HAVE COME TO OUR GREAT CITY GREAT HAMMURABI!')
 
-
-def finalSummary():
-    """Print final summary of game the usual evaluation is based on how many people starved,
-    and how many acres per person you end up with for example"""
-    # Total years of reign
-    # Total immigrants
-    # Total land owned
-    # Final land worth in bushels per acre
-
-
-    pass
+    game_dict[Stats.LAND_VAL] = newCostOfLand()
+    print(f'LAND NOW COSTS {game_dict[Stats.LAND_VAL]} BUSHELS')
 
 
 if __name__ == '__main__':

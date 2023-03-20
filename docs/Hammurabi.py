@@ -33,6 +33,7 @@ game_dict = {
 
 win_dict = {
     'Did Win?': True,
+    'How Much Did We Win?': 0,
     Stats.PEOPLE: 100,
     Stats.BUSHELS: 2800,  # grain in storage
     Stats.ACRES: 1000
@@ -95,21 +96,32 @@ class Hamurabi(object):
             player_input('Press any Key to continue')
             print(line_break * 2)
             last_round_update()
-
-        for i in last_round_dict:
-            if is_good_diff_between_rounds(i):
-                print(f'GREAT HAMMURABI WE HAVE DONE WELL WITH {i.name}')
-            else:
-                print(f'GREAT HAMMURABI WE HAVE LOST {i.name}')
-                win_dict['Did Win?'] = False
-        if not win_dict.get('Did Win?'):
-            print(line_break * 2)
+        if win_dict.get('Did Win?'):
+            for i in last_round_dict:
+                if did_we_do_better_then_the_start(i):
+                    print(f'GREAT HAMMURABI WE HAVE DONE WELL WITH {i.name}')
+                    win_dict['How Much Did We Win?'] = win_dict.get('How Much Did We Win?') + 1
+                else:
+                    print(f'GREAT HAMMURABI WE HAVE LOST {i.name}')
+            if win_dict.get('How Much Did We Win?') == 0:
+                print(line_break * 2)
+                print('HAMMURABI YOU FOOL, YOU ARE NOT READY FOR THE CROWN')
+                print('I WILL BE A BETTER RULER THEN YOU EVER HAVE BEEN!')
+            elif win_dict.get('How Much Did We Win?') == 1:
+                print(line_break * 2)
+                print('HAMMURABI YOU HAVE SURVIVED THE RATS')
+                print('HONESTLY I AM IMPRESSED')
+            elif win_dict.get('How Much Did We Win?') == 2:
+                print(line_break * 2)
+                print('GREAT HAMMURABI YOU HAVE DONE WELL')
+                print('I AM PLEASED TO BE YOUR SERVANT')
+            elif win_dict.get('How Much Did We Win?') == 3:
+                print(line_break * 2)
+                print('OH GREAT HAMMURABI YOU ARE THE LIGHT TO YOUR PEOPLE')
+                print('YOUR FATHER COULD NOT BE MORE PROUD')
+        else:
             print('HAMMURABI YOU FOOL, YOU ARE NOT READY FOR THE CROWN')
             print('I WILL BE A BETTER RULER THEN YOU EVER HAVE BEEN!')
-        else:
-            print(line_break * 2)
-            print('GREAT HAMMURABI YOU HAVE NO DOUBT BROUGHT PRIDE TO YOUR FATHER!')
-            print('I HAVE NEVER BEEN MORE PROUD TO SERVE YOU!')
 
 
     ## lots more functions here...
@@ -149,7 +161,7 @@ def can_purchase(has_amount, amount_buying: int, stat: Stats):
 
 
 # Have you done a good job between rounds?
-def is_good_diff_between_rounds(value):
+def did_we_do_better_then_the_start(value):
     if win_dict.get(value) is None:
         print(f'{value} is Not a Valid Key of last_round_dict!')
         return 'Break My Code so I can Fix it'

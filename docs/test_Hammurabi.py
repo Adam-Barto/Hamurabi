@@ -84,15 +84,15 @@ class Test(TestCase):
 
 
     @patch('Hammurabi.player_input', return_value='2')
-    def test_askHowManyAcresToPlant2(self, value):
-        actual = 5
+    def test_askHowManyAcresToPlant1(self, value):
+        actual = 2 * Hammurabi.game_dict.get(Hammurabi.Stats.LABOUR)
         Hammurabi.askHowManyAcresToPlant()
         expected = Hammurabi.curr_round_action_dict.get(Hammurabi.Stats.PLANTED)
         self.assertEqual(actual, expected)
 
     @patch('Hammurabi.player_input', return_value='10')
     def test_askHowManyAcresToPlant2(self, value):
-        actual = 100
+        actual = 10 * Hammurabi.game_dict.get(Hammurabi.Stats.LABOUR)
         Hammurabi.askHowManyAcresToPlant()
         expected = Hammurabi.curr_round_action_dict.get(Hammurabi.Stats.PLANTED)
         self.assertEqual(actual, expected)
@@ -160,6 +160,31 @@ class Test(TestCase):
             with self.subTest(f"{actual}"):
                 self.assertAlmostEqual(actual, Hammurabi.newCostOfLand(), delta=actual)
 
+
+    def test_immigrants(self):
+        class Stats(Enum):
+            PEOPLE = 0
+            BUSHELS = 1
+            ACRES = 2
+
+        Hammurabi.game_dict = {
+            Stats.PEOPLE: 100,
+            Stats.BUSHELS: 100,  # grain in storage
+            Stats.ACRES: 100,
+        }
+        Hammurabi.last_round_dict = {
+            Stats.PEOPLE: 100,
+            Stats.BUSHELS: 50,  # grain in storage
+            Stats.ACRES: 200,
+        }
+        test_cases = [(Stats.PEOPLE, None),
+                      (Stats.BUSHELS, True),
+                      (Stats.ACRES, False)
+                      ]
+        for (key, actual) in test_cases:
+            with self.subTest(f"{key}, {actual}"):
+                expected = Hammurabi.is_good_diff_between_rounds(key)
+                self.assertEqual(actual, expected)  # pretty sure this test is wrong
     def test_print_summary(self):
         self.fail()
 

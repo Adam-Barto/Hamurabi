@@ -14,7 +14,7 @@ class Stats(Enum):
     BUSHELS = 3
     ACRES = 4
     LAND_VAL = 5
-    END = 6
+    END = 10
     LABOUR = 7
     FEED = 8
     PLANTED = 9

@@ -23,7 +23,7 @@ class Stats(Enum):
 
 game_dict = {
     Stats.YEAR: 1,  # Current Round
-    Stats.END: 5,
+    Stats.END: 10,
     Stats.PEOPLE: 100,
     Stats.BUSHELS: 2800,  # grain in storage
     Stats.ACRES: 1000,

@@ -72,7 +72,7 @@ class Hamurabi(object):
             # lineBreak
             # status_print('CURRENTLY:')
             # lineBreak
-            curr_round_action_dict[Stats.SELL] = 0
+            #curr_round_action_dict[Stats.SELL] = 0
             askHowManyAcresToSell()
             if curr_round_action_dict.get(Stats.SELL) == 0:
                 askHowManyAcresToBuy()
